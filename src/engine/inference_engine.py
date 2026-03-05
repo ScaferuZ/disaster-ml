@@ -1,5 +1,46 @@
 class InferenceEngine:
 
+    def __init__(self):
+        self.pantai_lampuuk_characteristics_input = {
+            'level_of_interaction_with_disaster': 3.8,
+            'age': 39.18,
+            'usage_duration': 14.91,
+            'frequency_of_usage': 11.51,
+            'fishing_experience': 15.09
+        }
+
+        self.pantai_lhoknga_characteristics_input = {
+            'level_of_interaction_with_disaster': 1.27,
+            'age': 42.74,
+            'usage_duration': 17.98,
+            'frequency_of_usage': 5.24,
+            'fishing_experience': 17.91
+        }
+        
+        self.pantai_ulee_lheue_characteristics_input = {
+            'level_of_interaction_with_disaster': 3.59,
+            'age': 48.28,
+            'usage_duration': 19.75,
+            'frequency_of_usage': 4.27,
+            'fishing_experience': 21.44
+        }
+
+        self.pantai_depok_characteristics_input = {
+            'level_of_interaction_with_disaster': 4.43,
+            'age': 41.26,
+            'usage_duration': 12.51,
+            'frequency_of_usage': 2.62,
+            'fishing_experience': 15.58
+        }
+
+        self.pantai_samas_characteristics_input = {
+            'level_of_interaction_with_disaster': 2.12,
+            'age': 28.93,
+            'usage_duration': 4.96,
+            'frequency_of_usage': 2.43,
+            'fishing_experience': 6.34
+        }
+
     def get_lik_sign_description(self, lik_codes: list) -> list:
         """
         Return list of dictionaries containing code and description for each detected LIK sign.
