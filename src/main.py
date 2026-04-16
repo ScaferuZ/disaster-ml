@@ -19,7 +19,7 @@ class PredictionInput(BaseModel):
 
 @app.get("/")
 def home():
-    return {"message": "Sistem Peringatan Dini Nelayan (Hybrid SHAP) aktif."}
+    return {"message": "Sistem Peringatan Dini Nelayan Berbasis Pengetahuan Lokal aktif."}
 
 @app.post("/predict")
 def predict_risk(input_data: PredictionInput):
@@ -29,30 +29,30 @@ def predict_risk(input_data: PredictionInput):
     lik_code_list = {"lik_codes": input_data.lik_codes}
 
     if input_data.beach_location.lower() == "pantai_lampuuk":
-        features_for_engine = {
-            "features": engine.pantai_lampuuk_characteristics_input
+        community_rules = {
+            "rules": engine.pantai_lampuuk_rules
         }
-        data_for_engine = lik_code_list | features_for_engine
+        data_for_engine = lik_code_list | community_rules
     elif input_data.beach_location.lower() == "pantai_lhoknga": 
-        features_for_engine = {
-            "features": engine.pantai_lhoknga_characteristics_input
+        community_rules = {
+            "rules": engine.pantai_lhoknga_rules
         }
-        data_for_engine = lik_code_list | features_for_engine
+        data_for_engine = lik_code_list | community_rules
     elif input_data.beach_location.lower() == "pantai_ulee_lheue":
-        features_for_engine = {
-            "features": engine.pantai_ulee_lheue_characteristics_input
+        community_rules = {
+            "rules": engine.pantai_ulee_lheue_rules
         }
-        data_for_engine = lik_code_list | features_for_engine
+        data_for_engine = lik_code_list | community_rules
     elif input_data.beach_location.lower() == "pantai_depok":
-        features_for_engine = {
-            "features": engine.pantai_depok_characteristics_input
+        community_rules = {
+            "rules": engine.pantai_depok_rules
         }
-        data_for_engine = lik_code_list | features_for_engine
+        data_for_engine = lik_code_list | community_rules
     elif input_data.beach_location.lower() == "pantai_samas":
-        features_for_engine = {
-            "features": engine.pantai_samas_characteristics_input
+        community_rules = {
+            "rules": engine.pantai_samas_rules
         }
-        data_for_engine = lik_code_list | features_for_engine
+        data_for_engine = lik_code_list | community_rules
     else: 
         raise HTTPException(status_code=400, detail="Lokasi pantai tidak valid. Pilih salah satu: pantai_lampuuk, pantai_lhoknga, pantai_ulee_lheue, pantai_depok, pantai_samas.")
     

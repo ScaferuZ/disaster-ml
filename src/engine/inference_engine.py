@@ -1,45 +1,63 @@
+import pandas as pd
+from pathlib import Path
+
 class InferenceEngine:
 
     def __init__(self):
-        self.pantai_lampuuk_characteristics_input = {
-            'level_of_interaction_with_disaster': 3.8,
-            'age': 39.18,
-            'usage_duration': 14.91,
-            'frequency_of_usage': 11.51,
-            'fishing_experience': 15.09
+        self.df_community = pd.read_csv(Path(__file__).parent / 'community_rule_categorization.csv')
+
+        self.rules = {
+            'level_of_interaction_with_disaster': 1.50,
+            'frequency_of_usage': 5.50,
+            'usage_duration': 17.50,
+            'number_of_lik_combination': 1.50,
+            'number_of_experience_with_disaster': 1.50,
         }
 
-        self.pantai_lhoknga_characteristics_input = {
-            'level_of_interaction_with_disaster': 1.27,
-            'age': 42.74,
-            'usage_duration': 17.98,
-            'frequency_of_usage': 5.24,
-            'fishing_experience': 17.91
-        }
-        
-        self.pantai_ulee_lheue_characteristics_input = {
-            'level_of_interaction_with_disaster': 3.59,
-            'age': 48.28,
-            'usage_duration': 19.75,
-            'frequency_of_usage': 4.27,
-            'fishing_experience': 21.44
-        }
+        self.pantai_lampuuk_rules = {
+            'Overall Category': self.df_community.loc[self.df_community['Mapped Beach'] == 'pantai lampuuk', 'Overall Category'].iloc[0],
+            'Level of Interaction with Disaster Status': self.df_community.loc[self.df_community['Mapped Beach'] == 'pantai lampuuk', 'Level of Interaction with Disaster Status'].iloc[0],
+            'Frequency of Usage Status': self.df_community.loc[self.df_community['Mapped Beach'] == 'pantai lampuuk', 'Frequency of Usage Status'].iloc[0],
+            'Usage Duration Status': self.df_community.loc[self.df_community['Mapped Beach'] == 'pantai lampuuk', 'Usage Duration Status'].iloc[0],
+            'Number of Known LIK Status': self.df_community.loc[self.df_community['Mapped Beach'] == 'pantai lampuuk', 'Number of LIK Combination Status'].iloc[0],
+            'Number of Experience with Disaster Status': self.df_community.loc[self.df_community['Mapped Beach'] == 'pantai lampuuk', 'Number of Experience with Disaster Status'].iloc[0],
+        }    
 
-        self.pantai_depok_characteristics_input = {
-            'level_of_interaction_with_disaster': 4.43,
-            'age': 41.26,
-            'usage_duration': 12.51,
-            'frequency_of_usage': 2.62,
-            'fishing_experience': 15.58
-        }
+        self.pantai_depok_rules = {
+            'Overall Category': self.df_community.loc[self.df_community['Mapped Beach'] == 'pantai depok', 'Overall Category'].iloc[0],
+            'Level of Interaction with Disaster Status': self.df_community.loc[self.df_community['Mapped Beach'] == 'pantai lampuuk', 'Level of Interaction with Disaster Status'].iloc[0],
+            'Frequency of Usage Status': self.df_community.loc[self.df_community['Mapped Beach'] == 'pantai depok', 'Frequency of Usage Status'].iloc[0],
+            'Usage Duration Status': self.df_community.loc[self.df_community['Mapped Beach'] == 'pantai depok', 'Usage Duration Status'].iloc[0],
+            'Number of Known LIK Status': self.df_community.loc[self.df_community['Mapped Beach'] == 'pantai depok', 'Number of LIK Combination Status'].iloc[0],
+            'Number of Experience with Disaster Status': self.df_community.loc[self.df_community['Mapped Beach'] == 'pantai depok', 'Number of Experience with Disaster Status'].iloc[0],
+        }    
 
-        self.pantai_samas_characteristics_input = {
-            'level_of_interaction_with_disaster': 2.12,
-            'age': 28.93,
-            'usage_duration': 4.96,
-            'frequency_of_usage': 2.43,
-            'fishing_experience': 6.34
-        }
+        self.pantai_lhoknga_rules = {
+            'Overall Category': self.df_community.loc[self.df_community['Mapped Beach'] == 'pantai lhoknga', 'Overall Category'].iloc[0],
+            'Level of Interaction with Disaster Status': self.df_community.loc[self.df_community['Mapped Beach'] == 'pantai lhoknga', 'Level of Interaction with Disaster Status'].iloc[0],
+            'Frequency of Usage Status': self.df_community.loc[self.df_community['Mapped Beach'] == 'pantai lhoknga', 'Frequency of Usage Status'].iloc[0],
+            'Usage Duration Status': self.df_community.loc[self.df_community['Mapped Beach'] == 'pantai lhoknga', 'Usage Duration Status'].iloc[0],
+            'Number of Known LIK Status': self.df_community.loc[self.df_community['Mapped Beach'] == 'pantai lhoknga', 'Number of LIK Combination Status'].iloc[0],
+            'Number of Experience with Disaster Status': self.df_community.loc[self.df_community['Mapped Beach'] == 'pantai lhoknga', 'Number of Experience with Disaster Status'].iloc[0],
+        }    
+
+        self.pantai_ulee_lheue_rules = {
+            'Overall Category': self.df_community.loc[self.df_community['Mapped Beach'] == 'pantai ulee lheue', 'Overall Category'].iloc[0],
+            'Level of Interaction with Disaster Status': self.df_community.loc[self.df_community['Mapped Beach'] == 'pantai ulee lheue', 'Level of Interaction with Disaster Status'].iloc[0],
+            'Frequency of Usage Status': self.df_community.loc[self.df_community['Mapped Beach'] == 'pantai ulee lheue', 'Frequency of Usage Status'].iloc[0],
+            'Usage Duration Status': self.df_community.loc[self.df_community['Mapped Beach'] == 'pantai ulee lheue', 'Usage Duration Status'].iloc[0],
+            'Number of Known LIK Status': self.df_community.loc[self.df_community['Mapped Beach'] == 'pantai ulee lheue', 'Number of LIK Combination Status'].iloc[0],
+            'Number of Experience with Disaster Status': self.df_community.loc[self.df_community['Mapped Beach'] == 'pantai ulee lheue', 'Number of Experience with Disaster Status'].iloc[0],
+        }    
+
+        self.pantai_samas_rules = {
+            'Overall Category': self.df_community.loc[self.df_community['Mapped Beach'] == 'pantai samas', 'Overall Category'].iloc[0],
+            'Level of Interaction with Disaster Status': self.df_community.loc[self.df_community['Mapped Beach'] == 'pantai samas', 'Level of Interaction with Disaster Status'].iloc[0],
+            'Frequency of Usage Status': self.df_community.loc[self.df_community['Mapped Beach'] == 'pantai samas', 'Frequency of Usage Status'].iloc[0],
+            'Usage Duration Status': self.df_community.loc[self.df_community['Mapped Beach'] == 'pantai samas', 'Usage Duration Status'].iloc[0],
+            'Number of Known LIK Status': self.df_community.loc[self.df_community['Mapped Beach'] == 'pantai samas', 'Number of LIK Combination Status'].iloc[0],
+            'Number of Experience with Disaster Status': self.df_community.loc[self.df_community['Mapped Beach'] == 'pantai samas', 'Number of Experience with Disaster Status'].iloc[0],
+        }                                                       
 
     def get_lik_sign_description(self, lik_codes: list) -> list:
         """
@@ -69,40 +87,39 @@ class InferenceEngine:
                 for code in lik_codes if code.lower() in lik_code_list]
 
     def predict(self, data: dict) -> dict:
-        # 1. Konfigurasi Basis Aturan (Tipping Points)
-        top_5_trusted = ['wn-1', 'wn-2', 'wn-3', 'wn-7', 'wn-8']
+        top_5_trusted = ['wn-2', 'wn-8', 'wn-1', 'wn-3', 'wn-7']
         
         detected_codes = [s.lower() for s in data.get('lik_codes', [])]
-        features = data.get('features', {})
+        rules = data.get('rules', {})
         
         # 2. Evaluasi Profil Risiko Perilaku (Behavior Rules)
         met_rules = []
-        if features.get('level_of_interaction_with_disaster', 0) <= 2.50:
-            met_rules.append("Pengalaman Interaksi dengan Bencana Rendah (<= 2.50)")
-        if features.get('age', 0) >= 47.50:
-            met_rules.append("Usia Senior (>= 47.50)")
-        if features.get('usage_duration', 0) <= 16.50:
-            met_rules.append("Durasi Penggunaan Tanda Alam Rendah (<= 16.50)")
-        if features.get('frequency_of_usage', 0) <= 6.50:
-            met_rules.append("Frekuensi Penggunaan Tanda Alam Rendah (<= 6.50)")
-        if features.get('fishing_experience', 0) >= 6.50:
-            met_rules.append("Pengalaman Melaut Tinggi (>= 6.50)")
+        if rules.get('Level of Interaction with Disaster Status', 0) == 'Unsafe':
+            met_rules.append("Pengalaman Interaksi dengan Bencana Rendah")
+        if rules.get('Frequency of Usage Status', 0) == 'Unsafe':
+            met_rules.append("Frekuensi Penggunaan Tanda Alam Rendah")
+        if rules.get('Usage Duration Status', 0) == 'Unsafe':
+            met_rules.append("Durasi Penggunaan Tanda Alam Rendah")
+        if rules.get('Number of Known LIK Status', 0) == 'Unsafe':
+            met_rules.append("Pengetahuan Tanda Alam Lokal Kurang")
+        if rules.get('Number of Experience with Disaster Status', 0) == 'Unsafe':
+            met_rules.append("Pengalaman Langsung dengan Bencana Rendah")
 
-        is_high_risk = len(met_rules) > 0
+        community_risk_behaviour = rules['Overall Category']
 
         # 3. Analisis Validitas Sinyal (Trust Index)
         trusted_detected = [s.upper() for s in detected_codes if s in top_5_trusted]
         has_trusted_sign = len(trusted_detected) > 0
         
         # 4. Penyusunan Deskripsi Objektif
-        if is_high_risk:
-            desc = f"User diklasifikasikan berisiko tinggi karena memenuhi aturan behavior: {', '.join(met_rules)}."
+        if community_risk_behaviour == 'Unsafe':
+            desc = f"Komunitas diklasifikasikan berisiko tinggi karena terdeteksi karakteristik: {', '.join(met_rules)}."
         else:
-            desc = "User tidak memenuhi kriteria risiko tinggi pada profil demografis/behavior."
+            desc = "Komunitas tidak memenuhi kriteria risiko tinggi pada profil demografis/behavior."
 
         if (len(detected_codes) >= 3):
             is_high_risk = True
-            desc += " Harap berhati-hati, lebih dari 3 tanda alam terdeteksi."
+            desc += " Harap berhati-hati, terdeteksi 3 atau lebih tanda alam pengetahuan lokal."
 
         if has_trusted_sign:
             desc += f" Terdeteksi tanda alam dengan tingkat kepercayaan tinggi: {', '.join(trusted_detected)}."
@@ -111,7 +128,7 @@ class InferenceEngine:
 
         # 5. Final Output JSON
         return {
-            "is_high_risk": is_high_risk,
+            "community_risk_behaviour": community_risk_behaviour,
             "description": desc,
             "detected_signs": self.get_lik_sign_description(detected_codes)
         }
