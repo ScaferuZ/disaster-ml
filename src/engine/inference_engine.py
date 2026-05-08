@@ -110,9 +110,9 @@ class InferenceEngine:
         # Logic 2: Action recommendation (Mencari Level Tertinggi)
         # ---------------------------------------------------------
         escalation_map = {
-            'be careful': 0,
-            'stay alert/retrieve fishing gear': 1,
-            'adjust fishing time': 2
+            'berhati-hati / tingkatkan kewaspadaan': 0,
+            'siaga penuh / amankan alat tangkap': 1,
+            'sesuaikan jadwal melaut': 2
         }
         
         highest_level = -1
@@ -139,7 +139,7 @@ class InferenceEngine:
         # Format output rekomendasi aksi
         if highest_level != -1:
             # Format sesuai instruksi: "LIK_code: action level: action response" atau kata-kata
-            action_recommendation = f"Berdasarkan indikasi {trigger_code}, direkomendasikan tindakan: {best_action}."
+            action_recommendation = f"Berdasarkan indikasi: {self.get_lik_sign_description([trigger_code])[0]['description']}, direkomendasikan tindakan: {best_action}."
         else:
             action_recommendation = "Situasi aman. Tidak ada rekomendasi tindakan eskalasi tinggi saat ini."
 
