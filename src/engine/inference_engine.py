@@ -85,69 +85,53 @@ class InferenceEngine:
         except FileNotFoundError:
             df_action = pd.DataFrame(columns=['LIK', 'most_action_taken'])
 
-        # Extract data input
         raw_lik_codes = data.get('lik_codes', [])
         raw_active_warning = data.get('active_warning', [])
         rules = data.get('rules', {})
 
-        # Normalisasi format teks (misal: 'wn-2' atau 'WN-2' menjadi 'Wn-2')
         input_lik_codes = [str(s).capitalize() for s in raw_lik_codes]
         active_warnings = [str(s).capitalize() for s in raw_active_warning]
 
-        # ---------------------------------------------------------
-        # Logic 1: Trusted signs filter
-        # ---------------------------------------------------------
-        trusted_signs = ['Wn-2', 'Wn-8', 'Wn-1', 'Wn-3', 'Wn-7', 'Wn-4', 'Wn-9', 'Wn-13', 'Wn-6', 'Wn-5']
-        
-        # Filter hanya LIK yang masuk dalam list trusted
+        # Top-6 Trust Index
+        trusted_signs = ['Wn-2', 'Wn-8', 'Wn-1', 'Wn-3', 'Wn-7', 'Wn-4']
+
         trusted_input_codes = [code for code in input_lik_codes if code in trusted_signs]
         trusted_active_warnings = [code for code in active_warnings if code in trusted_signs]
 
-        # Gabungkan input nelayan dan active warning untuk dievaluasi aksinya (gunakan set agar unik)
         combined_codes = list(set(trusted_input_codes + trusted_active_warnings))
 
-        # ---------------------------------------------------------
-        # Logic 2: Action recommendation (Mencari Level Tertinggi)
-        # ---------------------------------------------------------
+        # Action recommendation
         escalation_map = {
             'berhati-hati / tingkatkan kewaspadaan': 0,
             'siaga penuh / amankan alat tangkap': 1,
             'sesuaikan jadwal melaut': 2
         }
-        
+
         highest_level = -1
         best_action = "Tidak ada aksi"
         trigger_code = None
 
         if combined_codes and not df_action.empty:
-            # Filter dataframe berdasarkan kombinasi LIK yang valid
             df_selected = df_action[df_action['LIK'].isin(combined_codes)].copy()
-            
+
             if not df_selected.empty:
-                # Map ke level eskalasi
                 df_selected['action_lower'] = df_selected['most_action_taken'].str.lower()
                 df_selected['level'] = df_selected['action_lower'].map(escalation_map).fillna(-1)
-                
-                # Ambil level paling tinggi
+
                 max_idx = df_selected['level'].idxmax()
                 highest_level = df_selected.loc[max_idx, 'level']
-                
+
                 if highest_level != -1:
                     best_action = df_selected.loc[max_idx, 'most_action_taken']
                     trigger_code = df_selected.loc[max_idx, 'LIK']
 
-        # Format output rekomendasi aksi
         if highest_level != -1:
-            # Format sesuai instruksi: "LIK_code: action level: action response" atau kata-kata
             action_recommendation = f"Berdasarkan indikasi: {self.get_lik_sign_description([trigger_code])[0]['description']}, direkomendasikan tindakan: {best_action}."
         else:
             action_recommendation = "Situasi aman. Tidak ada rekomendasi tindakan eskalasi tinggi saat ini."
 
-        # ---------------------------------------------------------
-        # Logic 3: Get Sign Description
-        # ---------------------------------------------------------
         desc_list = self.get_lik_sign_description(combined_codes)
-            
+
         extracted_descriptions = []
         if desc_list:
             for item in desc_list:
@@ -155,21 +139,29 @@ class InferenceEngine:
                     extracted_descriptions.append(" - ".join([str(v) for v in item.values()]))
                 else:
                     extracted_descriptions.append(str(item))
-                    
+
         sign_description_str = " | ".join(extracted_descriptions) if extracted_descriptions else "Tidak ada deskripsi tanda alam yang valid."
 
-        # ---------------------------------------------------------
-        # Community risk categorization (Format: Boolean)
-        # ---------------------------------------------------------
-        # Return False jika 'Unsafe' (Low Actionable), True jika sebaliknya (Actionable)
-        is_actionable = "Low Actionable" if rules.get('Overall Category') == "Unsafe" else "Actionable"
+        is_actionable = False if rules.get('Overall Category') == "Unsafe" else True
 
-        # ---------------------------------------------------------
-        # Return Final Output JSON
-        # ---------------------------------------------------------
+        top6_signs = ['Wn-2', 'Wn-8', 'Wn-1', 'Wn-3', 'Wn-7', 'Wn-4']
+        is_high_lik = any(code in top6_signs for code in combined_codes)
+
+        if is_high_lik and not is_actionable:
+            escalation_level = 4
+        elif is_high_lik and is_actionable:
+            escalation_level = 3
+        elif (not is_high_lik) and not is_actionable:
+            escalation_level = 2
+        else:
+            escalation_level = 1
+
         return {
             "active_warning": combined_codes,
             "sign_description": sign_description_str,
-            "community_characteristics": is_actionable,
-            "action_recommendation": action_recommendation
+            "community_characteristics": "Safe" if is_actionable else "Unsafe",
+            "action_recommendation": action_recommendation,
+            "high_LIK": is_high_lik,
+            "is_actionable": is_actionable,
+            "escalation_level": escalation_level
         }
